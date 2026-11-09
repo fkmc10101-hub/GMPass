@@ -34,6 +34,11 @@ GLOSSARY: dict[str, list[str]] = {
     "audit trail": ["점검기록", "AuditTrail", "監査証跡"],
     "전산": ["computer", "electronic records", "コンピュータ"],
     "제조기록": ["batch production record", "製造記録"],
+    "제조 기록": ["batch production record", "製造記録"],
+    # 보관 기간: '얼마나 보관해야 해?'가 211.180(a) '1 year after the expiration date'를 못 찾던 문제 (2026-11-09)
+    "보관해야": ["record retention", "retained for at least 1 year after the expiration date", "保存しなければならない"],
+    "보관 기간": ["record retention", "retained for at least 1 year after the expiration date", "保存期間"],
+    "보관기간": ["record retention", "retained for at least 1 year after the expiration date", "保存期間"],
     "품질부서": ["quality control unit", "品質部門"],
     "위탁": ["contract", "委託"],
 }
