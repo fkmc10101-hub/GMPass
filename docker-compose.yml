@@ -1,0 +1,26 @@
+# 로컬·EC2 공통 실행: docker compose up -d --build
+# 백엔드 환경변수는 backend/.env (루트의 .env.example 참고)
+services:
+  backend:
+    build: ./backend
+    env_file: ./backend/.env
+    environment:
+      CHROMA_DIR: /data/chroma
+      UPLOAD_DIR: /data/raw
+      DATABASE_URL: ${DATABASE_URL:-sqlite:////data/gmpass.db}
+      HF_HOME: /data/hf-cache   # 임베딩 모델을 한 번만 내려받도록 캐시 보존
+    volumes:
+      - ./data:/data
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    environment:
+      VITE_API_PROXY: http://backend:8000
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    restart: unless-stopped

@@ -1,0 +1,28 @@
+question,country,expected_ids,note
+완제품 출하 승인은 누가 하나요?,US,US-21CFR211-211.22;US-21CFR211-211.165,품질관리부서(QC unit)의 승인 권한
+완제품 출하 승인은 누가 하나요?,JP,JP-GMP-art12,製造所からの出荷の管理
+완제품 출하 승인은 누가 하나요?,KR,KR-RULE-B1-3.3;KR-NOTICE-B17-5.8;KR-RULE-B1-2-2.2,품질(보증)부서 책임자
+변경관리 절차에서 무엇을 평가해야 하나요?,JP,JP-GMP-art14,
+변경관리 절차에서 무엇을 평가해야 하나요?,KR,KR-RULE-B1-12;KR-RULE-B1-2-13;KR-NOTICE-B13-13,
+일탈이 발생하면 어떻게 처리하나요?,US,US-21CFR211-211.100;US-21CFR211-211.192,
+일탈이 발생하면 어떻게 처리하나요?,JP,JP-GMP-art15,
+자율점검은 어떻게 해야 하나요?,JP,JP-GMP-art18,
+자율점검은 어떻게 해야 하나요?,KR,KR-RULE-B1-13;KR-RULE-B1-2-2.4,
+제품품질평가(PQR)는 무엇을 검토하나요?,US,US-21CFR211-211.180,연례 제품 검토는 211.180(e)
+제품품질평가(PQR)는 무엇을 검토하나요?,JP,JP-GMP-art11-3,
+제품품질평가(PQR)는 무엇을 검토하나요?,KR,KR-RULE-B1-7.3;KR-RULE-B1-2-2.5;KR-NOTICE-B17-1.5,
+보관검체는 얼마나 보관해야 하나요?,US,US-21CFR211-211.170,
+보관검체는 얼마나 보관해야 하나요?,KR,KR-NOTICE-B16-8;KR-NOTICE-B16-2,
+작업원 교육훈련 요구사항은?,US,US-21CFR211-211.25,
+작업원 교육훈련 요구사항은?,JP,JP-GMP-art19,
+작업원 교육훈련 요구사항은?,KR,KR-RULE-B1-14;KR-NOTICE-B17-2.4,
+전산 시스템의 Audit Trail 요구사항은?,US,US-21CFR211-211.68,
+전산 시스템의 Audit Trail 요구사항은?,KR,KR-NOTICE-B09-4.5,
+원료 공급업체는 어떻게 관리하나요?,JP,JP-GMP-art11-4,
+원료 공급업체는 어떻게 관리하나요?,US,US-21CFR211-211.84,
+세척 밸리데이션 요구사항은?,KR,KR-NOTICE-B13-12,
+불만 처리 절차는?,US,US-21CFR211-211.198,
+불만 처리 절차는?,JP,JP-GMP-art16,
+불만 처리 절차는?,KR,KR-RULE-B1-11;KR-NOTICE-B17-8.3;KR-RULE-B1-2-15,
+안정성 시험 요구사항은?,US,US-21CFR211-211.166,
+안정성 시험 요구사항은?,JP,JP-GMP-art11-2,

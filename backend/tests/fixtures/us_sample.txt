@@ -1,0 +1,7 @@
+TEST FIXTURE - fictional text for automated tests only. Not the real regulation.
+
+§ 211.22 Responsibilities of quality control unit
+There shall be a quality control unit that has the responsibility and authority to approve or reject all components, drug product containers, closures, in-process materials, packaging material, labeling, and drug products.
+
+§ 211.68 Automatic, mechanical, and electronic equipment
+Appropriate controls shall be exercised over computer or related systems to assure that changes in master production and control records are instituted only by authorized personnel.

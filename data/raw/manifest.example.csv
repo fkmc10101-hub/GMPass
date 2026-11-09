@@ -1,0 +1,7 @@
+file,country,title,doc_code,version,effective_date,language,source_url
+kr_gmp_regulation.pdf,KR,의약품 제조 및 품질관리에 관한 규정,식약처 고시,(내려받은 판 기입),,ko,https://www.law.go.kr
+us_21cfr211.html,US,Current Good Manufacturing Practice for Finished Pharmaceuticals,21 CFR Part 211,(eCFR 기준일 기입),,en,https://www.ecfr.gov/current/title-21/chapter-I/subchapter-C/part-211
+eu_annex11.pdf,EU,EudraLex Volume 4 Annex 11 Computerised Systems,Annex 11,(개정판 기입),,en,https://health.ec.europa.eu/medicinal-products/eudralex/eudralex-volume-4_en
+pics_pe009.pdf,PICS,PIC/S Guide to Good Manufacturing Practice for Medicinal Products,PE 009,(버전 기입),,en,https://picscheme.org/en/publications
+jp_gmp_ordinance.html,JP,医薬品及び医薬部外品の製造管理及び品質管理の基準に関する省令,GMP省令,(개정 기준일 기입),,ja,https://elaws.e-gov.go.jp
+ich_q10.pdf,ICH,Pharmaceutical Quality System,Q10,,,en,https://www.ich.org/page/quality-guidelines

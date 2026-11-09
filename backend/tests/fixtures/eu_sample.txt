@@ -1,0 +1,7 @@
+TEST FIXTURE - fictional text for automated tests only. Not the real guideline.
+
+Annex 16 Certification by a Qualified Person and Batch Release
+Each batch of finished product must be certified by a Qualified Person before being released for sale or supply in the EU.
+
+Annex 11 Computerised Systems
+Audit trail: consideration should be given, based on a risk assessment, to building into the system the creation of a record of all GMP-relevant changes and deletions.

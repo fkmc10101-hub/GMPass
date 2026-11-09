@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+
+# Env / secrets
+.env
+backend/.env
+
+# Data (원문 PDF·벡터DB·SQLite는 커밋하지 않음)
+data/raw/*
+!data/raw/.gitkeep
+!data/raw/manifest.example.csv
+!data/raw/sources.yaml
+data/processed/_review.xlsx
+data/eval/result_*.csv
+data/chroma/
+data/*.db
+backend/*.db
+
+# Node
+node_modules/
+frontend/dist/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json

@@ -1,0 +1,113 @@
+// GMPass ERD — https://dbdiagram.io 에 그대로 붙여넣으면 다이어그램이 그려집니다.
+// backend/app/models.py 와 같은 구조입니다.
+
+Project GMPass {
+  database_type: 'MySQL'
+  Note: '나라별 GMP 가이던스 RAG 챗봇. 벡터는 ChromaDB에 저장하고, 이 DB는 문서 메타데이터·청크 원문·대화·인용·평가·캐시를 관리한다.'
+}
+
+Enum document_status {
+  pending [note: '업로드 후 색인 대기·진행 중']
+  indexed [note: '색인 완료']
+  failed  [note: '색인 실패 (error_message 참고)']
+}
+
+Table documents {
+  id int [pk, increment]
+  country varchar(8) [not null, note: 'KR / US / EU / PICS / JP / ICH']
+  title varchar(300) [not null, note: '문서명']
+  doc_code varchar(100) [default: '', note: '예: Annex 11, 21 CFR 211']
+  version varchar(50) [default: '', note: '판(版)·개정 표기']
+  effective_date varchar(10) [default: '', note: 'YYYY-MM-DD']
+  language varchar(5) [default: '', note: 'ko / en / ja']
+  source_url varchar(500) [default: '', note: '원문 출처']
+  file_name varchar(255) [not null, note: '저장된 원문 파일명 (해시 접두어 포함)']
+  file_hash char(64) [not null, unique, note: 'SHA-256 — 중복 등록 방지']
+  status document_status [not null, default: 'pending']
+  chunk_count int [default: 0]
+  error_message text
+  created_at datetime [not null]
+  updated_at datetime [not null, note: '변경 시 캐시 data_version이 바뀜']
+
+  indexes {
+    country
+  }
+}
+
+Table chunks {
+  id int [pk, increment]
+  document_id int [not null, ref: > documents.id, note: 'ON DELETE CASCADE']
+  chunk_index int [not null]
+  section varchar(200) [default: '', note: '인식한 조항 제목 (예: 제5조(품질보증), § 211.22)']
+  page int [null, note: 'PDF 페이지 (PDF가 아니면 NULL)']
+  text text [not null]
+  char_count int [not null]
+  vector_id varchar(64) [not null, unique, note: 'ChromaDB id = doc{document_id}-c{chunk_index}']
+
+  indexes {
+    (document_id, chunk_index) [unique]
+  }
+}
+
+Table chat_sessions {
+  id int [pk, increment]
+  title varchar(200) [not null, note: '첫 질문 앞 60자']
+  created_at datetime [not null]
+}
+
+Table chat_messages {
+  id int [pk, increment]
+  session_id int [not null, ref: > chat_sessions.id, note: 'ON DELETE CASCADE']
+  role varchar(10) [not null, note: 'user / assistant']
+  country varchar(8) [default: '', note: 'assistant 답변 대상: ALL 또는 국가 코드']
+  content text [not null]
+  countries varchar(100) [default: '', note: '선택한 국가 (쉼표 구분)']
+  mode varchar(10) [default: 'single', note: 'single / compare']
+  review_required boolean [default: false]
+  review_reasons varchar(300) [default: '', note: '검토 사유 코드 (쉼표 구분)']
+  top_score float [null, note: '최고 검색 유사도']
+  consistency float [null, note: 'self-consistency 평균 유사도']
+  model varchar(50) [default: '']
+  latency_ms int [null]
+  trace_id varchar(64) [default: '', note: 'Langfuse 추적 ID']
+  created_at datetime [not null]
+}
+
+Table message_citations {
+  id int [pk, increment]
+  message_id int [not null, ref: > chat_messages.id, note: 'ON DELETE CASCADE']
+  chunk_id int [null, ref: > chunks.id, note: 'ON DELETE SET NULL — 문서가 삭제돼도 인용 기록은 남김']
+  ref_no int [not null, note: '답변 본문의 [n] 번호']
+  cited boolean [default: false, note: '본문에서 실제로 인용했는지']
+  score float [not null]
+}
+
+Table feedback {
+  id int [pk, increment]
+  message_id int [not null, ref: > chat_messages.id, note: 'ON DELETE CASCADE']
+  rating varchar(4) [not null, note: 'up / down']
+  comment text
+  created_at datetime [not null]
+}
+
+Table answer_cache {
+  id int [pk, increment]
+  cache_key char(64) [not null, unique, note: 'SHA-256(질문+국가+모드+데이터버전+모델)']
+  response_json text [not null]
+  data_version varchar(64) [not null]
+  expires_at datetime [not null, note: '기본 7일 TTL']
+  created_at datetime [not null]
+
+  indexes {
+    expires_at
+  }
+}
+
+Table translations {
+  id int [pk, increment]
+  chunk_id int [not null, unique, ref: - chunks.id, note: 'ON DELETE CASCADE']
+  source_hash char(64) [not null, note: '원문이 바뀌면(재색인) 다시 번역']
+  text_ko text [not null, note: '근거 원문(영어·일본어)의 한국어 기계 번역']
+  model varchar(50) [not null]
+  created_at datetime [not null]
+}

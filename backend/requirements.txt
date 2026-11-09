@@ -1,0 +1,20 @@
+fastapi==0.162.2
+uvicorn[standard]==0.54.0
+SQLAlchemy==2.1.8
+pydantic==2.14.3
+pydantic-settings==2.16.2
+python-multipart==0.0.33
+chromadb==1.5.9
+pypdf==7.0.0
+# 원문 → 조항 단위 정리(scripts/prepare_sources.py)
+PyYAML==6.0.3
+openpyxl==3.1.5
+openai==3.46.0
+sentence-transformers==6.2.0
+# MySQL(Aiven 등)을 쓸 때만 필요
+PyMySQL==1.2.3
+# Langfuse 추적을 쓸 때만 필요 
+langfuse==5.2.0
+# 테스트
+pytest==9.2.0
+httpx==0.28.1

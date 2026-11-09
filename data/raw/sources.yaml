@@ -1,0 +1,204 @@
+# 원문 목록 — prepare_sources.py 가 이 목록대로 data/processed/<doc_id>.jsonl 을 만든다.
+# file 은 data/raw 기준 경로. 원문 파일은 수정하지 않는다.
+sources:
+  # ---------------- 미국 (eCFR, 2026-11-05 기준) ----------------
+  - doc_id: US-21CFR210
+    parser: us_pdf
+    part: "210"
+    file: US_21CFR_Part210_2026-11-05.pdf
+    country: US
+    doc_code: 21 CFR Part 210
+    title: Current Good Manufacturing Practice in Manufacturing, Processing, Packing, or Holding of Drugs; General
+    version: "eCFR 2026-11-05"
+    source_url: https://www.ecfr.gov/current/title-21/chapter-I/subchapter-C/part-210
+  - doc_id: US-21CFR211
+    parser: us_pdf
+    part: "211"
+    file: US_21CFR_Part211_2026-11-05.pdf
+    country: US
+    doc_code: 21 CFR Part 211
+    title: Current Good Manufacturing Practice for Finished Pharmaceuticals
+    version: "eCFR 2026-11-05"
+    source_url: https://www.ecfr.gov/current/title-21/chapter-I/subchapter-C/part-211
+
+  # ---------------- 일본 (e-Gov 법령 API, 2026-05-01 시행) ----------------
+  - doc_id: JP-GMP
+    parser: jp_xml
+    file: JP_GMP省令_416M60000100179_20260501.xml
+    country: JP
+    doc_code: GMP省令
+    title: 医薬品及び医薬部外品の製造管理及び品質管理の基準に関する省令
+    version: "2026-05-01 施行"
+    source_url: https://laws.e-gov.go.jp/law/416M60000100179
+
+  # ---------------- 한국: 의약품 등의 안전에 관한 규칙 (총리령 제2100호, 2026-03-05 시행) ----------------
+  - doc_id: KR-RULE-B1
+    parser: kr_pdf
+    file: KR_규칙_별표1_의약품제조및품질관리기준.pdf
+    country: KR
+    doc_code: 의약품 등의 안전에 관한 규칙 [별표 1]
+    title: 의약품 제조 및 품질관리기준
+    version: "2026-03-05 시행"
+    source_url: https://www.law.go.kr/법령/의약품등의안전에관한규칙
+  - doc_id: KR-RULE-B1-2
+    parser: kr_pdf
+    file: KR_별표1의2_원료의약품제조및품질관리기준_2026-03-05.pdf
+    country: KR
+    doc_code: 의약품 등의 안전에 관한 규칙 [별표 1의2]
+    title: 원료의약품 제조 및 품질관리기준
+    version: "2026-03-05 시행"
+    source_url: https://www.law.go.kr/법령/의약품등의안전에관한규칙
+
+  # ---------------- 한국: 식약처 고시 「의약품 제조 및 품질관리에 관한 규정」 (제2024-87호, 2024-12-30 시행) 별표 ----------------
+  - doc_id: KR-NOTICE-B01
+    parser: kr_pdf
+    file: KR_고시_별표01_무균의약품제조.pdf
+    country: KR
+    doc_code: 의약품 제조 및 품질관리에 관한 규정 [별표 1]
+    title: 무균의약품 제조
+    version: "고시 제2024-87호 (2024-12-30 시행)"
+    source_url: https://www.law.go.kr/행정규칙/의약품제조및품질관리에관한규정
+  - doc_id: KR-NOTICE-B02
+    parser: kr_pdf
+    file: KR_고시_별표02_생물유래의약품.pdf
+    country: KR
+    doc_code: 의약품 제조 및 품질관리에 관한 규정 [별표 2]
+    title: 생물유래의약품의 원료 및 완제의약품 제조
+    version: "고시 제2024-87호 (2024-12-30 시행)"
+    source_url: https://www.law.go.kr/행정규칙/의약품제조및품질관리에관한규정
+  - doc_id: KR-NOTICE-B02-2
+    parser: kr_pdf
+    file: KR_고시_별표02의2_첨단바이오의약품.pdf
+    country: KR
+    doc_code: 의약품 제조 및 품질관리에 관한 규정 [별표 2의2]
+    title: 첨단바이오의약품 제조
+    version: "고시 제2024-87호 (2024-12-30 시행)"
+    source_url: https://www.law.go.kr/행정규칙/의약품제조및품질관리에관한규정
+  - doc_id: KR-NOTICE-B03
+    parser: kr_pdf
+    file: KR_고시_별표03_방사성의약품.pdf
+    country: KR
+    doc_code: 의약품 제조 및 품질관리에 관한 규정 [별표 3]
+    title: 방사성의약품 제조
+    version: "고시 제2024-87호 (2024-12-30 시행)"
+    source_url: https://www.law.go.kr/행정규칙/의약품제조및품질관리에관한규정
+  - doc_id: KR-NOTICE-B04
+    parser: kr_pdf
+    file: KR_고시_별표04_의료용고압가스.pdf
+    country: KR
+    doc_code: 의약품 제조 및 품질관리에 관한 규정 [별표 4]
+    title: 의료용 고압가스 제조
+    version: "고시 제2024-87호 (2024-12-30 시행)"
+    source_url: https://www.law.go.kr/행정규칙/의약품제조및품질관리에관한규정
+  - doc_id: KR-NOTICE-B05
+    parser: kr_pdf
+    file: KR_고시_별표05_한약생약제제.pdf
+    country: KR
+    doc_code: 의약품 제조 및 품질관리에 관한 규정 [별표 5]
+    title: 한약(생약)제제 제조
+    version: "고시 제2024-87호 (2024-12-30 시행)"
+    source_url: https://www.law.go.kr/행정규칙/의약품제조및품질관리에관한규정
+  - doc_id: KR-NOTICE-B06
+    parser: kr_pdf
+    file: KR_고시_별표06_출발물질및포장자재검체채취.pdf
+    country: KR
+    doc_code: 의약품 제조 및 품질관리에 관한 규정 [별표 6]
+    title: 출발물질 및 포장자재 검체 채취
+    version: "고시 제2024-87호 (2024-12-30 시행)"
+    source_url: https://www.law.go.kr/행정규칙/의약품제조및품질관리에관한규정
+  - doc_id: KR-NOTICE-B07
+    parser: kr_pdf
+    file: KR_고시_별표07_액제크림제연고제.pdf
+    country: KR
+    doc_code: 의약품 제조 및 품질관리에 관한 규정 [별표 7]
+    title: 액제, 크림제 및 연고제 제조
+    version: "고시 제2024-87호 (2024-12-30 시행)"
+    source_url: https://www.law.go.kr/행정규칙/의약품제조및품질관리에관한규정
+  - doc_id: KR-NOTICE-B08
+    parser: kr_pdf
+    file: KR_고시_별표08_흡입용에어로솔.pdf
+    country: KR
+    doc_code: 의약품 제조 및 품질관리에 관한 규정 [별표 8]
+    title: 흡입용 압축 정량 에어로솔 제제 제조
+    version: "고시 제2024-87호 (2024-12-30 시행)"
+    source_url: https://www.law.go.kr/행정규칙/의약품제조및품질관리에관한규정
+  - doc_id: KR-NOTICE-B09
+    parser: kr_pdf
+    file: KR_고시_별표09_컴퓨터화시스템.pdf
+    country: KR
+    doc_code: 의약품 제조 및 품질관리에 관한 규정 [별표 9]
+    title: 컴퓨터화 시스템
+    version: "고시 제2024-87호 (2024-12-30 시행)"
+    source_url: https://www.law.go.kr/행정규칙/의약품제조및품질관리에관한규정
+  - doc_id: KR-NOTICE-B10
+    parser: kr_pdf
+    file: KR_고시_별표10_전리방사선.pdf
+    country: KR
+    doc_code: 의약품 제조 및 품질관리에 관한 규정 [별표 10]
+    title: 전리방사선의 의약품 제조 사용
+    version: "고시 제2024-87호 (2024-12-30 시행)"
+    source_url: https://www.law.go.kr/행정규칙/의약품제조및품질관리에관한규정
+  - doc_id: KR-NOTICE-B11
+    parser: kr_pdf
+    file: KR_고시_별표11_임상시험용의약품.pdf
+    country: KR
+    doc_code: 의약품 제조 및 품질관리에 관한 규정 [별표 11]
+    title: 임상시험용의약품 제조
+    version: "고시 제2024-87호 (2024-12-30 시행)"
+    source_url: https://www.law.go.kr/행정규칙/의약품제조및품질관리에관한규정
+  - doc_id: KR-NOTICE-B12
+    parser: kr_pdf
+    file: KR_고시_별표12_혈액혈장유래의약품.pdf
+    country: KR
+    doc_code: 의약품 제조 및 품질관리에 관한 규정 [별표 12]
+    title: 사람의 혈액 또는 혈장에서 유래한 의약품 제조
+    version: "고시 제2024-87호 (2024-12-30 시행)"
+    source_url: https://www.law.go.kr/행정규칙/의약품제조및품질관리에관한규정
+  - doc_id: KR-NOTICE-B13
+    parser: kr_pdf
+    file: KR_고시_별표13_적격성평가와밸리데이션.pdf
+    country: KR
+    doc_code: 의약품 제조 및 품질관리에 관한 규정 [별표 13]
+    title: 적격성평가와 밸리데이션
+    version: "고시 제2024-87호 (2024-12-30 시행)"
+    source_url: https://www.law.go.kr/행정규칙/의약품제조및품질관리에관한규정
+  - doc_id: KR-NOTICE-B14
+    parser: kr_pdf
+    file: KR_고시_별표14_실시간출하시험.pdf
+    country: KR
+    doc_code: 의약품 제조 및 품질관리에 관한 규정 [별표 14]
+    title: 실시간 출하 시험 및 매개변수기반 출하
+    version: "고시 제2024-87호 (2024-12-30 시행)"
+    source_url: https://www.law.go.kr/행정규칙/의약품제조및품질관리에관한규정
+  - doc_id: KR-NOTICE-B15
+    parser: kr_pdf
+    file: KR_고시_별표15_원료의약품제조.pdf
+    country: KR
+    doc_code: 의약품 제조 및 품질관리에 관한 규정 [별표 15]
+    title: 원료의약품 제조
+    version: "고시 제2024-87호 (2024-12-30 시행)"
+    source_url: https://www.law.go.kr/행정규칙/의약품제조및품질관리에관한규정
+  - doc_id: KR-NOTICE-B16
+    parser: kr_pdf
+    file: KR_고시_별표16_참조검체및보관검체.pdf
+    country: KR
+    doc_code: 의약품 제조 및 품질관리에 관한 규정 [별표 16]
+    title: 참조검체 및 보관검체
+    version: "고시 제2024-87호 (2024-12-30 시행)"
+    source_url: https://www.law.go.kr/행정규칙/의약품제조및품질관리에관한규정
+  - doc_id: KR-NOTICE-B17
+    parser: kr_pdf
+    file: KR_고시_별표17_완제의약품제조.pdf
+    country: KR
+    doc_code: 의약품 제조 및 품질관리에 관한 규정 [별표 17]
+    title: 완제의약품 제조
+    version: "고시 제2024-87호 (2024-12-30 시행)"
+    source_url: https://www.law.go.kr/행정규칙/의약품제조및품질관리에관한규정
+  - doc_id: KR-NOTICE-B18
+    parser: kr_pdf_whole
+    file: KR_고시_별표18_제조소총람구성.pdf
+    country: KR
+    doc_code: 의약품 제조 및 품질관리에 관한 규정 [별표 18]
+    title: 제조소 총람 구성
+    version: "고시 제2024-87호 (2024-12-30 시행)"
+    source_url: https://www.law.go.kr/행정규칙/의약품제조및품질관리에관한규정
