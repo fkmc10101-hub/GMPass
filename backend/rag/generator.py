@@ -10,6 +10,7 @@ import re
 from dataclasses import dataclass, field
 
 from .countries import JURISDICTIONS
+from .lang_check import find_untranslated
 from .vectorstore import SearchHit
 
 SYSTEM_PROMPT = """너는 제약 품질보증(QA) 담당자를 돕는 GMP 가이던스 안내 도우미다.
@@ -17,7 +18,10 @@ SYSTEM_PROMPT = """너는 제약 품질보증(QA) 담당자를 돕는 GMP 가이
 1. 제공된 [참고자료] 안의 내용만 근거로 답한다. 참고자료에 없는 내용은 추측하지 않는다.
 2. 문장마다 근거가 된 참고자료 번호를 [1], [2]처럼 표시한다.
 3. 참고자료가 질문에 답하기에 부족하면 insufficient를 true로 하고, 무엇이 부족한지 answer에 짧게 쓴다.
-4. 답변은 한국어로 쓰되, 조항 번호와 원문 용어(예: Qualified Person, 21 CFR 211.22, 第十条)는 그대로 병기한다.
+4. 답변은 처음부터 끝까지 한국어 문장으로 쓴다. 영어·일본어 구절을 문장 속에 그대로 남기지 않는다.
+   - 규정 용어는 한국어로 옮기고, 필요하면 처음 한 번만 괄호로 원어를 병기한다. (예: 품질관리부서(quality control unit), 제조관리자(製造管理者))
+   - 괄호 밖에는 영어 단어나 일본어를 쓰지 않는다. 조항 번호는 한국어 표기로 쓰고 원문 표기는 괄호에 둔다. (예: 제5조(第五条), § 211.22)
+   - 나열 조항이나 긴 원문 구절도 한국어로 풀어 쓴다.
 5. 법적 해석이나 실사 대응 판단을 대신하지 않는다는 점을 전제로, 사실만 간결하게 정리한다.
 반드시 다음 JSON 형식으로만 답한다:
 {"answer": "...", "source_refs": [1, 2], "insufficient": false}"""
@@ -26,7 +30,9 @@ SYSTEM_PROMPT = """너는 제약 품질보증(QA) 담당자를 돕는 GMP 가이
 COMPARE_PROMPT = """너는 제약 품질보증(QA) 담당자를 돕는 GMP 가이던스 비교 분석 도우미다.
 [참고자료]에는 여러 나라의 조항이 섞여 있고, 각 자료 앞에 (나라)가 표시되어 있다. 반드시 아래 규칙을 지켜라.
 1. 각 나라의 내용은 그 나라 참고자료만 근거로 쓴다. 다른 나라 자료로 추측해 채우지 않는다.
-2. 문장마다 근거 번호 [1], [2]를 붙인다. 조항 번호와 원어 용어(예: § 211.22, 第十二条, quality control unit)는 괄호로 병기한다.
+2. 문장마다 근거 번호 [1], [2]를 붙인다. 번호 뒤에 조항 제목을 덧붙일 때도 한국어로 쓴다. (예: [5] § 211.165 출하 시험 및 승인)
+   영어·일본어 구절을 문장 속에 그대로 남기지 않는다. 규정 용어는 한국어로 옮기고, 필요하면 처음 한 번만 괄호로 원어를 병기한다. (예: 품질관리부서(quality control unit), 일탈 관리(逸脱の管理))
+   괄호 밖에는 영어 단어나 일본어를 쓰지 않는다. 조항 번호는 한국어로 쓰고 원문 표기는 괄호에 둔다. (예: 제5조(第五条))
 3. answer는 한국어로, 다음 순서로 쓴다. 줄바꿈으로 구분한다.
    ■ 나라별 핵심 요건: 나라마다 1~3문장
    ■ 공통점: 1~3문장
@@ -129,13 +135,33 @@ class OpenAIGenerator:
         )
         return (resp.choices[0].message.content or "").strip()
 
+    def _enforce_korean(self, gen: Generation, question: str, context: str, system: str, tries: int = 3) -> Generation:
+        """괄호 밖에 영어·일본어가 남은 답변은 해당 구절을 알려 주고 다시 쓰게 한다. 가장 깨끗한 답변을 남긴다."""
+        best = gen
+        for _ in range(tries):
+            bad = find_untranslated(best.answer)
+            if not bad:
+                break
+            fragments = ", ".join(dict.fromkeys(bad))
+            retry_question = (
+                f"{question}\n\n[수정 지시] 직전 답변에 번역되지 않은 구절이 남아 있었다: {fragments}\n"
+                "이 구절을 모두 한국어로 옮겨 처음부터 다시 답하라. 원어는 괄호 안에만 병기하고, 근거 번호 [n]은 그대로 유지한다."
+            )
+            retry = parse_generation(self._call(retry_question, context, self.temperature, system), self.model)
+            if len(find_untranslated(retry.answer)) < len(bad):
+                best = retry
+        return best
+
     def compare(self, question: str, hits: list[SearchHit]) -> Generation:
         """여러 나라 근거를 한 번에 보고 공통점·차이점을 정리한다."""
-        return parse_generation(self._call(question, format_context(hits), self.temperature, COMPARE_PROMPT), self.model)
+        context = format_context(hits)
+        gen = parse_generation(self._call(question, context, self.temperature, COMPARE_PROMPT), self.model)
+        return self._enforce_korean(gen, question, context, COMPARE_PROMPT)
 
     def generate(self, question: str, hits: list[SearchHit], n_samples: int = 1) -> Generation:
         context = format_context(hits)
         gen = parse_generation(self._call(question, context, self.temperature), self.model)
+        gen = self._enforce_korean(gen, question, context, SYSTEM_PROMPT)
         # 같은 질문을 여러 번 생성해 답변이 흔들리는지 확인 (self-consistency)
         for _ in range(max(0, n_samples - 1)):
             extra = parse_generation(self._call(question, context, 0.7), self.model)

@@ -20,6 +20,9 @@ import urllib.request
 from datetime import date
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from rag.lang_check import find_untranslated  # noqa: E402
+
 # 인사팀·면접관이 눌러 볼 대표 질문 (나라 간 비교 질문은 자동으로 비교 모드로 전환됨)
 DEMO_QUESTIONS: list[dict] = [
     {"q": "출하 승인에 대해 한국과 미국은 어떻게 달라?", "group": "나라별 차이"},
@@ -91,15 +94,17 @@ def main() -> int:
                    {"question": item["q"], "countries": COUNTRIES, "mode": "single", "use_cache": False})
         snapshot["answers"][item["q"]] = res
         flagged = sum(a["review_required"] for a in res["answers"])
+        left = sum(1 for a in res["answers"] if find_untranslated(a["answer"]))
         print(f"[{i:2}/{len(DEMO_QUESTIONS)}] {item['q']} → {res['mode']}, 카드 {len(res['answers'])}개, "
-              f"검토 필요 {flagged}개, {time.time() - started:.0f}초")
+              f"검토 필요 {flagged}개, 번역 덜 된 답변 {left}개, {time.time() - started:.0f}초")
 
         if args.no_translate:
             continue
         for a in res["answers"]:
             for c in a["citations"]:
                 cid = c.get("chunk_id")
-                if c["cited"] and cid and c["country"] != "KR" and str(cid) not in snapshot["translations"]:
+                # 인용 여부와 상관없이 영어·일본어 근거는 모두 번역해 둔다 (화면의 '한국어 번역 보기'가 항상 동작하도록)
+                if cid and c["country"] != "KR" and str(cid) not in snapshot["translations"]:
                     try:
                         snapshot["translations"][str(cid)] = call(args.base, "/api/translate", {"chunk_id": cid})
                     except urllib.error.HTTPError as exc:
